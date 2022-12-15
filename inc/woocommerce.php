@@ -29,8 +29,6 @@ function bext_add_custom_field_on_placed_order( $order ){
 
   $rows = $wpdb->get_results("SELECT * FROM `{$wpdb->prefix}posts` WHERE `post_parent` = {$order_id}");
 
-  error_log(print_r($rows,1), 3, __DIR__ . '/error.log');
-
   if( function_exists('get_wc_appointment') ){
 
     foreach( $rows as $row ){
@@ -61,7 +59,7 @@ function bext_add_custom_field_on_placed_order( $order ){
           'post_author'   => $order->get_user_id() ? $order->get_user_id() : $order->get_customer_id()
         ]);
 
-        $jwt_token = create_jwt_token($duration);
+        $jwt_token = create_jwt_token($start_time+$duration);
 
         $meetings_ordered[] = array(
           'start_date' => $start_date,
@@ -146,7 +144,7 @@ function create_meetings_ordered_array($order){
       $jitsi_domain = $settings['jisti_server_domain'];
       $link = $jitsi_domain .'/'.$meeting_url_path;
 
-      $jwt_token = create_jwt_token($duration);
+      $jwt_token = create_jwt_token($start_time+$duration);
 
       $meetings_ordered[] = array(
         'start_date' => $start_date,
